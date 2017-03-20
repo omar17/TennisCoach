@@ -2,11 +2,16 @@ package omar.tennis.coach;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +26,10 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -29,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnRevoke;
     private TextView txtNombre;
     private TextView txtEmail;
+    private ImageView imagen;
+    private String img;
 
     private GoogleApiClient apiClient;
     private static final int RC_SIGN_IN = 1001;
@@ -45,6 +56,7 @@ public class MainActivity extends AppCompatActivity
         btnRevoke = (Button)findViewById(R.id.revoke_button);
         txtNombre = (TextView)findViewById(R.id.txtNombre);
         txtEmail = (TextView)findViewById(R.id.txtEmail);
+        imagen = (ImageView) findViewById(R.id.imageView3);
 
         //Google API Client
 
@@ -125,8 +137,24 @@ public class MainActivity extends AppCompatActivity
         if (result.isSuccess()) {
             //Usuario logueado --> Mostramos sus datos
             GoogleSignInAccount acct = result.getSignInAccount();
+            //String imagen_url = acct.getPhotoUrl().toString();
             txtNombre.setText(acct.getDisplayName());
             txtEmail.setText(acct.getEmail());
+            img = acct.getPhotoUrl().toString();
+            Bitmap bitmap = null;
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+                bitmap = BitmapFactory.decodeStream((InputStream)new URL(img).getContent());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imagen.setImageBitmap(bitmap);
+            //Toast.makeText(this, img, Toast.LENGTH_LONG).show();
+            //Log.d(img,img);
+            /*img = acct.getPhotoUrl().toString();
+            Toast.makeText(this, img, Toast.LENGTH_LONG).show();
+            imagen.setImageURI(Uri.parse("file:"+img));*/
             updateUI(true);
         } else {
             //Usuario no logueado --> Lo mostramos como "Desconectado"
@@ -139,6 +167,7 @@ public class MainActivity extends AppCompatActivity
             btnSignIn.setVisibility(View.GONE);
             btnSignOut.setVisibility(View.VISIBLE);
             btnRevoke.setVisibility(View.VISIBLE);
+            imagen.setVisibility(View.VISIBLE);
         } else {
             txtNombre.setText("Desconectado");
             txtEmail.setText("Desconectado");
@@ -146,6 +175,7 @@ public class MainActivity extends AppCompatActivity
             btnSignIn.setVisibility(View.VISIBLE);
             btnSignOut.setVisibility(View.GONE);
             btnRevoke.setVisibility(View.GONE);
+            imagen.setVisibility(View.GONE);
         }
     }
 
