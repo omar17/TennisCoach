@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "448059497680",
+    "project_id": "firebase-tenniscoach"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448059497680:android:e2ec4eeafb1d8d8d",
+        "android_client_info": {
+          "package_name": "omar.tennis.coach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448059497680-ap9vi3utv15at8tc4r6glte8tv30fdme.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "omar.tennis.coach",
+            "certificate_hash": "DBA1A98D39745412D755A09B5A478ACFF546ED94"
+          }
+        },
+        {
+          "client_id": "448059497680-k347gjr4pp1qhrjcrqvqej4q26i5uvji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9K8UULsKmBSzJHrmNDH0wWwRCgxnvVrA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
