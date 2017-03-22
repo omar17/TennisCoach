@@ -2,6 +2,7 @@ package omar.tennis.coach;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     private TextView txtEmail;
     private ImageView imagenEmail;
     private String img;
+    private LinearLayout layoutTabs;
 
     private GoogleApiClient apiClient;
     private static final int RC_SIGN_IN = 1001;
@@ -54,23 +58,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnSignIn = (SignInButton)findViewById(R.id.sign_in_button);
-        btnSignOut = (Button)findViewById(R.id.sign_out_button);
-        txtNombre = (TextView)findViewById(R.id.txtNombre);
-        txtEmail = (TextView)findViewById(R.id.txtEmail);
+        btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
+        btnSignOut = (Button) findViewById(R.id.sign_out_button);
+        txtNombre = (TextView) findViewById(R.id.txtNombre);
+        txtEmail = (TextView) findViewById(R.id.txtEmail);
         imagenEmail = (ImageView) findViewById(R.id.photoEmail);
-
-        //extraemos el drawable en un bitmap
-        /*Drawable originalDrawable = getResources().getDrawable(R.drawable.android_email);
-        Bitmap originalBitmap = ((BitmapDrawable) originalDrawable).getBitmap();
-
-        //creamos el drawable redondeado
-        RoundedBitmapDrawable redondaDrawable = RoundedBitmapDrawableFactory.create(getResources(), originalBitmap);
-
-        //asignamos el CornerRadius
-        redondaDrawable.setCornerRadius(originalBitmap.getHeight());
-
-        imagenEmail.setImageDrawable(redondaDrawable);*/
+        layoutTabs = (LinearLayout) findViewById(R.id.layoutTabs);
 
         //Google API Client
 
@@ -112,6 +105,28 @@ public class MainActivity extends AppCompatActivity
                         });
             }
         });
+
+        Resources res = getResources();
+
+        TabHost tabs=(TabHost) findViewById(R.id.tabhost);
+        tabs.setup();
+
+        TabHost.TabSpec spec=tabs.newTabSpec("mitab1");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("TAB1", res.getDrawable(android.R.drawable.ic_btn_speak_now));
+        tabs.addTab(spec);
+
+        spec=tabs.newTabSpec("mitab2");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("TAB2", res.getDrawable(android.R.drawable.ic_dialog_map));
+        tabs.addTab(spec);
+
+        spec=tabs.newTabSpec("mitab3");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("TAB3", res.getDrawable(android.R.drawable.ic_dialog_info));
+        tabs.addTab(spec);
+
+        tabs.setCurrentTab(0);
 
         updateUI(false);
     }
@@ -176,13 +191,16 @@ public class MainActivity extends AppCompatActivity
             btnSignIn.setVisibility(View.GONE);
             btnSignOut.setVisibility(View.VISIBLE);
             imagenEmail.setVisibility(View.VISIBLE);
+            txtNombre.setVisibility(View.VISIBLE);
+            txtEmail.setVisibility(View.VISIBLE);
+            layoutTabs.setVisibility(View.VISIBLE);
         } else {
-            txtNombre.setText("Desconectado");
-            txtEmail.setText("Desconectado");
-
+            txtNombre.setVisibility(View.GONE);
+            txtEmail.setVisibility(View.GONE);
             btnSignIn.setVisibility(View.VISIBLE);
             btnSignOut.setVisibility(View.GONE);
             imagenEmail.setVisibility(View.GONE);
+            layoutTabs.setVisibility(View.GONE);
         }
     }
 
