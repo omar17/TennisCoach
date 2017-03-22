@@ -4,8 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.StrictMode;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,10 +39,9 @@ public class MainActivity extends AppCompatActivity
 
     private SignInButton btnSignIn;
     private Button btnSignOut;
-    private Button btnRevoke;
     private TextView txtNombre;
     private TextView txtEmail;
-    private ImageView imagen;
+    private ImageView imagenEmail;
     private String img;
 
     private GoogleApiClient apiClient;
@@ -53,10 +56,21 @@ public class MainActivity extends AppCompatActivity
 
         btnSignIn = (SignInButton)findViewById(R.id.sign_in_button);
         btnSignOut = (Button)findViewById(R.id.sign_out_button);
-        btnRevoke = (Button)findViewById(R.id.revoke_button);
         txtNombre = (TextView)findViewById(R.id.txtNombre);
         txtEmail = (TextView)findViewById(R.id.txtEmail);
-        imagen = (ImageView) findViewById(R.id.imageView3);
+        imagenEmail = (ImageView) findViewById(R.id.photoEmail);
+
+        //extraemos el drawable en un bitmap
+        /*Drawable originalDrawable = getResources().getDrawable(R.drawable.android_email);
+        Bitmap originalBitmap = ((BitmapDrawable) originalDrawable).getBitmap();
+
+        //creamos el drawable redondeado
+        RoundedBitmapDrawable redondaDrawable = RoundedBitmapDrawableFactory.create(getResources(), originalBitmap);
+
+        //asignamos el CornerRadius
+        redondaDrawable.setCornerRadius(originalBitmap.getHeight());
+
+        imagenEmail.setImageDrawable(redondaDrawable);*/
 
         //Google API Client
 
@@ -99,19 +113,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        btnRevoke.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Auth.GoogleSignInApi.revokeAccess(apiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                updateUI(false);
-                            }
-                        });
-            }
-        });
-
         updateUI(false);
     }
 
@@ -137,24 +138,32 @@ public class MainActivity extends AppCompatActivity
         if (result.isSuccess()) {
             //Usuario logueado --> Mostramos sus datos
             GoogleSignInAccount acct = result.getSignInAccount();
-            //String imagen_url = acct.getPhotoUrl().toString();
             txtNombre.setText(acct.getDisplayName());
             txtEmail.setText(acct.getEmail());
-            img = acct.getPhotoUrl().toString();
+            if(acct.getPhotoUrl() != null){
+                img = acct.getPhotoUrl().toString();
+            }else{
+                img = "";
+            }
             Bitmap bitmap = null;
+            RoundedBitmapDrawable redonda = null;
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
                 StrictMode.setThreadPolicy(policy);
-                bitmap = BitmapFactory.decodeStream((InputStream)new URL(img).getContent());
+                if(img!=""){
+                    bitmap = BitmapFactory.decodeStream((InputStream)new URL(img).getContent());
+                }else{
+                    Drawable originalDrawable = getResources().getDrawable(R.drawable.android_email);
+                    bitmap = ((BitmapDrawable) originalDrawable).getBitmap();
+                }
+                 redonda = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+
+                //asignamos el CornerRadius
+                redonda.setCornerRadius(bitmap.getHeight());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imagen.setImageBitmap(bitmap);
-            //Toast.makeText(this, img, Toast.LENGTH_LONG).show();
-            //Log.d(img,img);
-            /*img = acct.getPhotoUrl().toString();
-            Toast.makeText(this, img, Toast.LENGTH_LONG).show();
-            imagen.setImageURI(Uri.parse("file:"+img));*/
+            imagenEmail.setImageDrawable(redonda);
             updateUI(true);
         } else {
             //Usuario no logueado --> Lo mostramos como "Desconectado"
@@ -166,16 +175,14 @@ public class MainActivity extends AppCompatActivity
         if (signedIn) {
             btnSignIn.setVisibility(View.GONE);
             btnSignOut.setVisibility(View.VISIBLE);
-            btnRevoke.setVisibility(View.VISIBLE);
-            imagen.setVisibility(View.VISIBLE);
+            imagenEmail.setVisibility(View.VISIBLE);
         } else {
             txtNombre.setText("Desconectado");
             txtEmail.setText("Desconectado");
 
             btnSignIn.setVisibility(View.VISIBLE);
             btnSignOut.setVisibility(View.GONE);
-            btnRevoke.setVisibility(View.GONE);
-            imagen.setVisibility(View.GONE);
+            imagenEmail.setVisibility(View.GONE);
         }
     }
 
