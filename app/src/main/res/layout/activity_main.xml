@@ -57,6 +57,26 @@
                         android:id="@+id/ajustes"
                         android:onClick="mostrar"/>
 
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/pb_exp"
+                        android:max="100"
+                        android:progress="0" />
+
+                    <Button
+                        android:text="mas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_mas" />
+
+                    <Button
+                        android:text="menos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_menos" />
+
                 </LinearLayout>
 
                 <LinearLayout

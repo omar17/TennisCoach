@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener {
 
     private SignInButton btnSignIn;
-    private Button btnSignOut;
+    private Button btnMas, btnMenos;
     private TextView txtNombre;
     private TextView txtEmail;
     private ImageView imagenEmail;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout layoutTabs;
     private String nombre, email;
     private RoundedBitmapDrawable imagen;
+    private ProgressBar pbExp;
 
     private GoogleApiClient apiClient;
     private static final int RC_SIGN_IN = 1001;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
 
     Dialog customDialog = null;
+    int progreso = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,30 @@ public class MainActivity extends AppCompatActivity
 
         btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         layoutTabs = (LinearLayout) findViewById(R.id.layoutTabs);
+        btnMas = (Button) findViewById(R.id.btn_mas);
+        btnMenos = (Button) findViewById(R.id.btn_menos);
+        pbExp = (ProgressBar) findViewById(R.id.pb_exp);
+
+        btnMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pbExp.getProgress()<100) {
+                    progreso += 10;
+                    pbExp.setProgress(progreso);
+                }
+            }
+        });
+
+        btnMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pbExp.getProgress()>0){
+                    progreso -= 10;
+                    pbExp.setProgress(progreso);
+                }
+            }
+        });
+
 
         //Google API Client
 
