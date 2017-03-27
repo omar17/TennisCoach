@@ -68,15 +68,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="414dp">
 
                 <LinearLayout
                     android:id="@+id/tab1"
@@ -84,11 +81,12 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:text="Hola"
+                    <Button
+                        android:text="@string/ajustes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/textView" />
+                        android:id="@+id/ajustes"
+                        android:onClick="mostrar"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -107,6 +105,11 @@
 
                 </LinearLayout>
             </FrameLayout>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </TabHost>
 

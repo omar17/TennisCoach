@@ -1,5 +1,6 @@
 package omar.tennis.coach;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity
     private static final int RC_SIGN_IN = 1001;
 
     private ProgressDialog progressDialog;
+
+    Dialog customDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,5 +242,60 @@ public class MainActivity extends AppCompatActivity
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.hide();
         }
+    }
+
+    public void mostrar(View view)
+    {
+        // con este tema personalizado evitamos los bordes por defecto
+        customDialog = new Dialog(this,R.style.Theme_Dialog_Translucent);
+        //deshabilitamos el título por defecto
+        customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //obligamos al usuario a pulsar los botones para cerrarlo
+        customDialog.setCancelable(false);
+        //establecemos el contenido de nuestro dialog
+        customDialog.setContentView(R.layout.dialog_opciones);
+
+        TextView titulo = (TextView) customDialog.findViewById(R.id.titulo);
+        titulo.setText("Ajustes");
+
+        Button btnCerrarSesion = (Button) customDialog.findViewById(R.id.btn_cerrar_sesion);
+
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                Auth.GoogleSignInApi.signOut(apiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                updateUI(false);
+                            }
+                        });
+            }
+        });
+
+        ((Button) customDialog.findViewById(R.id.aceptar)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view)
+            {
+                customDialog.dismiss();
+                Toast.makeText(MainActivity.this, R.string.aceptar, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        ((Button) customDialog.findViewById(R.id.cancelar)).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view)
+            {
+                customDialog.dismiss();
+                Toast.makeText(MainActivity.this, R.string.cancelar, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        customDialog.show();
     }
 }
