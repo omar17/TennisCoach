@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity
     private ImageView imagenEmail;
     private String img;
     private LinearLayout layoutTabs;
+    private String nombre, email;
+    private RoundedBitmapDrawable imagen;
 
     private GoogleApiClient apiClient;
     private static final int RC_SIGN_IN = 1001;
@@ -63,10 +65,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         btnSignIn = (SignInButton) findViewById(R.id.sign_in_button);
-        btnSignOut = (Button) findViewById(R.id.sign_out_button);
-        txtNombre = (TextView) findViewById(R.id.txtNombre);
-        txtEmail = (TextView) findViewById(R.id.txtEmail);
-        imagenEmail = (ImageView) findViewById(R.id.photoEmail);
         layoutTabs = (LinearLayout) findViewById(R.id.layoutTabs);
 
         //Google API Client
@@ -94,19 +92,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(apiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
-            }
-        });
-
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Auth.GoogleSignInApi.signOut(apiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                updateUI(false);
-                            }
-                        });
             }
         });
 
@@ -157,8 +142,8 @@ public class MainActivity extends AppCompatActivity
         if (result.isSuccess()) {
             //Usuario logueado --> Mostramos sus datos
             GoogleSignInAccount acct = result.getSignInAccount();
-            txtNombre.setText(acct.getDisplayName());
-            txtEmail.setText(acct.getEmail());
+            nombre = acct.getDisplayName();
+            email = acct.getEmail();
             if(acct.getPhotoUrl() != null){
                 img = acct.getPhotoUrl().toString();
             }else{
@@ -182,7 +167,7 @@ public class MainActivity extends AppCompatActivity
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            imagenEmail.setImageDrawable(redonda);
+            imagen = redonda;
             updateUI(true);
         } else {
             //Usuario no logueado --> Lo mostramos como "Desconectado"
@@ -193,17 +178,9 @@ public class MainActivity extends AppCompatActivity
     private void updateUI(boolean signedIn) {
         if (signedIn) {
             btnSignIn.setVisibility(View.GONE);
-            btnSignOut.setVisibility(View.VISIBLE);
-            imagenEmail.setVisibility(View.VISIBLE);
-            txtNombre.setVisibility(View.VISIBLE);
-            txtEmail.setVisibility(View.VISIBLE);
             layoutTabs.setVisibility(View.VISIBLE);
         } else {
-            txtNombre.setVisibility(View.GONE);
-            txtEmail.setVisibility(View.GONE);
             btnSignIn.setVisibility(View.VISIBLE);
-            btnSignOut.setVisibility(View.GONE);
-            imagenEmail.setVisibility(View.GONE);
             layoutTabs.setVisibility(View.GONE);
         }
     }
@@ -255,8 +232,15 @@ public class MainActivity extends AppCompatActivity
         //establecemos el contenido de nuestro dialog
         customDialog.setContentView(R.layout.dialog_opciones);
 
+        txtNombre = (TextView) customDialog.findViewById(R.id.txtNombre);
+        txtEmail = (TextView) customDialog.findViewById(R.id.txtEmail);
+        imagenEmail = (ImageView) customDialog.findViewById(R.id.photoEmail);
         TextView titulo = (TextView) customDialog.findViewById(R.id.titulo);
+
         titulo.setText("Ajustes");
+        txtNombre.setText(nombre);
+        txtEmail.setText(email);
+        imagenEmail.setImageDrawable(imagen);
 
         Button btnCerrarSesion = (Button) customDialog.findViewById(R.id.btn_cerrar_sesion);
 
@@ -274,25 +258,12 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        ((Button) customDialog.findViewById(R.id.aceptar)).setOnClickListener(new View.OnClickListener() {
+        ((Button) customDialog.findViewById(R.id.btn_cerrar)).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view)
             {
                 customDialog.dismiss();
-                Toast.makeText(MainActivity.this, R.string.aceptar, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        ((Button) customDialog.findViewById(R.id.cancelar)).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view)
-            {
-                customDialog.dismiss();
-                Toast.makeText(MainActivity.this, R.string.cancelar, Toast.LENGTH_SHORT).show();
-
             }
         });
 

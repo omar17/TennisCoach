@@ -6,4 +6,5 @@
     <string name="cancelar">Cancelar</string>
     <string name="cerrar_sesion">Cerrar Sesion</string>
     <string name="ajustes">Ajustes</string>
+    <string name="cerrar">X</string>
 </resources>

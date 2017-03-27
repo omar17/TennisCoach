@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:srcCompat="@color/colorPrimary"
@@ -48,7 +48,7 @@
             android:id="@+id/sign_out_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="sing out" />
+            android:text="sing out" />-->
 
     </LinearLayout>
 
@@ -68,12 +68,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="414dp">
+                android:layout_height="500dp">
 
                 <LinearLayout
                     android:id="@+id/tab1"
