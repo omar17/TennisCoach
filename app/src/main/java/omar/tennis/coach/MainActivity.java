@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     private SignInButton btnSignIn;
     private Button btnMas, btnMenos;
     private TextView txtNombre;
-    private TextView txtEmail;
+    private TextView txtEmail, tvUsuario;
     private ImageView imagenEmail;
     private String img;
     private LinearLayout layoutTabs;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         btnMas = (Button) findViewById(R.id.btn_mas);
         btnMenos = (Button) findViewById(R.id.btn_menos);
         pbExp = (ProgressBar) findViewById(R.id.pb_exp);
+        tvUsuario = (TextView) findViewById(R.id.tv_usuario);
 
         btnMas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,11 +265,21 @@ public class MainActivity extends AppCompatActivity
         txtEmail = (TextView) customDialog.findViewById(R.id.txtEmail);
         imagenEmail = (ImageView) customDialog.findViewById(R.id.photoEmail);
         TextView titulo = (TextView) customDialog.findViewById(R.id.titulo);
+        Button btnCambiarUsu = (Button) customDialog.findViewById(R.id.btnCambiarUsu);
+        final EditText etUsu = (EditText) customDialog.findViewById(R.id.etUsuario);
 
         titulo.setText("Ajustes");
         txtNombre.setText(nombre);
         txtEmail.setText(email);
         imagenEmail.setImageDrawable(imagen);
+
+        btnCambiarUsu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog.dismiss();
+                tvUsuario.setText(etUsu.getText());
+            }
+        });
 
         Button btnCerrarSesion = (Button) customDialog.findViewById(R.id.btn_cerrar_sesion);
 
